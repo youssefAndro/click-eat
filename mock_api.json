@@ -1,0 +1,1189 @@
+{
+"source": "mockoon:1.14.1",
+"data": [
+{
+"type": "environment",
+"item": {
+"uuid": "",
+"lastMigration": 15,
+"name": "Click & Eat",
+"endpointPrefix": "click&eat/v1",
+"latency": 0,
+"port": 3001,
+"routes": [
+{
+"uuid": "",
+"documentation": "Generate random menu",
+"method": "get",
+"endpoint": "test_request",
+"responses": [
+{
+"uuid": "",
+"body": "{\n  \"status\" : true,\n  \"data\" : {\n    \"items\" :[\n      {{# repeat (queryParam 'total' '10') }}\n        {\n          \"id\": \"{{ faker 'random.uuid' min=1 max=100 }}\",\n          \"name\": \"{{ faker 'commerce.productName' }}\",\n          \"description\": \"{{ faker 'commerce.productDescription' }}\",\n          \"image\" : \"{{ faker 'image.food' }}\",\n          \"category\": {\n                \"id\": \"{{ faker 'random.uuid' }}\",\n                \"name\": \"{{ faker 'commerce.product' }}\",\n              },\n          \"createdAt\": \"{{now}}\",\n          \"extras\": [\n            {{# repeat (faker 'random.number' 3) }}\n              {\n                \"id\": \"{{ faker 'random.uuid' }}\",\n                \"name\": \"{{oneOf (array 'Boisson' 'Sauce' 'Juice')}}\",\n                \"min\" : \"{{ faker 'random.number' min=0 max=1 }}\",\n                \"max\" :\"{{ faker 'random.number' min=1 max=5 }}\",\n                \"subextras\": [\n                   {{# repeat (faker 'random.number' min=2 max=5) }}\n                    {\n                      \"id\": \"{{ faker 'random.uuid' }}\",\n                      \"name\": \"{{oneOf (array 'Coca' 'Fanta' 'Hawai')}}\",\n                    }\n                    {{/ repeat }}\n                  ]\n              }\n            {{/ repeat }}\n          ]\n        },\n      {{/ repeat }}\n    ],  \n  }\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [],
+"rulesOperator": "AND",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n  {{setVar 'type' (oneOf (array 'products' 'materials')) }}\n  \"status\" : true,\n  \"data\" : {\n    {{#repeat (queryParam 'total' '5')}}\n      {\n        \"id\": \"{{faker 'random.uuid'}}\",\n        {{# switch type }}\n          {{# case 'products'}}\n          \"name\": \"{{faker 'commerce.product'}}\",\n          \"price\": \"{{faker 'commerce.price'}} EUR\"\n          {{/ case}}\n          \n          {{# case 'materials'}}\n          \"name\": \"{{faker 'commerce.productMaterial'}}\",\n          \"quantity\": \"{{faker 'random.number' 50}}\"\n          {{/ case}}\n        {{/ switch}}\n      }\n    {{/repeat}}\n  }\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "sss",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [],
+"rulesOperator": "OR",
+"disableTemplating": false
+}
+],
+"enabled": true,
+"randomResponse": false,
+"sequentialResponse": true
+},
+{
+"uuid": "",
+"documentation": "Sign in",
+"method": "post",
+"endpoint": "auth/login",
+"responses": [
+{
+"uuid": "",
+"body": "{\n  \"statusCode\": 401,\n  \"message\": \"Unauthorized\"\n}",
+"latency": 0,
+"statusCode": 401,
+"label": "",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "password",
+"value": "123456aAs",
+"isRegex": false
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"security\": {\n\t\t\"access_token\": \"012345678910\",\n\t},\n\t\"user\": {\n\t\t\"id\": 34,\n\t\t\"fname\": \"{{ faker 'name.firstName' }}\",\n\t\t\"lname\": \"{{ faker 'name.lastName' }}\",\n\t\t\"email\": \"{{body 'email'}}\",\n\t\t\"phone\": \"{{ faker 'phone.phoneNumber' }}\",\n\t\t\"address\": \"{{ street }}\",\n\t\t\"city\": \"{{ faker 'address.city' }}\",\n\t\t\"zip_code\": \"{{ faker 'address.zipCode' }}\",\n\t\t\"stat\": 1,\n\t\t\"created\": \"{{ faker 'date.past' 12}}\",\n\t\t\"media_id\": \"{{ faker 'image.avatar' }}\",\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "password",
+"value": "123456aA",
+"isRegex": false
+},
+{
+"target": "body",
+"modifier": "email",
+"value": "youssef@ajicreative.fr",
+"isRegex": false
+}
+],
+"rulesOperator": "AND",
+"disableTemplating": false
+}
+],
+"enabled": true,
+"randomResponse": false,
+"sequentialResponse": false
+},
+{
+"uuid": "",
+"documentation": "Create new user",
+"method": "post",
+"endpoint": "api/signup",
+"responses": [
+{
+"uuid": "",
+"body": "{\n\t\"security\": {\n\t\t\"access_token\": \"012345678910\",\n\t},\n\t\"user\": {\n\t\t\"id\": 34,\n\t\t\"fname\": \"{{ body 'fullname' }}\",\n\t\t\"email\": \"{{body 'email'}}\",\n\t\t\"phone\": \"{{ body 'phone' }}\",\n\t\t\"address\": \"{{ street }}\",\n\t\t\"city\": \"{{ faker 'address.city' }}\",\n\t\t\"zip_code\": \"{{ faker 'address.zipCode' }}\",\n\t\t\"stat\": 1,\n\t\t\"created\": \"{{ faker 'date.past' 12}}\",\n\t\t\"media_id\": \"{{ faker 'image.avatar' }}\",\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [],
+"rulesOperator": "AND",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"email\" : \"Veuillez entrer votre email\",\n\t  \"password\" : \"Veuillez entrer un mot de passe valide\",\n\t  \"phone\" : \"Veuillez entrer votre numero de telephone\",\n\t  \"fullname\" : \"Veuillez entrer votre nom\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "All params error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "email",
+"value": "^((?!([\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4})).)*$",
+"isRegex": true
+},
+{
+"target": "body",
+"modifier": "password",
+"value": "^((?!((?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,})).)*$",
+"isRegex": true
+},
+{
+"target": "body",
+"modifier": "fullname",
+"value": "",
+"isRegex": false
+},
+{
+"target": "body",
+"modifier": "phone",
+"value": "^((?!((\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4})).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "AND",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n    \"fullname\" : \"Veuillez entrer votre nom\",\n\t  \"password\" : \"Veuillez entrer un mot de passe valide\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "name & password error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "password",
+"value": "^((?!((?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,})).)*$",
+"isRegex": true
+},
+{
+"target": "body",
+"modifier": "fullname",
+"value": "",
+"isRegex": false
+}
+],
+"rulesOperator": "AND",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"fullname\" : \"Veuillez entrer votre nom\",\n\t  \"email\" : \"Veuillez entrer votre email\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "name & email error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "email",
+"value": "^((?!([\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4})).)*$",
+"isRegex": true
+},
+{
+"target": "body",
+"modifier": "fullname",
+"value": "",
+"isRegex": false
+}
+],
+"rulesOperator": "AND",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"fullname\" : \"Veuillez entrer votre nom\",\n\t  \"phone\" : \"Veuillez entrer votre numero de telephone\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "name & phone error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "phone",
+"value": "^((?!((\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4})).)*$",
+"isRegex": true
+},
+{
+"target": "body",
+"modifier": "fullname",
+"value": "",
+"isRegex": false
+}
+],
+"rulesOperator": "AND",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"email\" : \"Veuillez entrer votre email\",\n\t  \"phone\" : \"Veuillez entrer votre numero de telephone\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "email & phone error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "email",
+"value": "^((?!([\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4})).)*$",
+"isRegex": true
+},
+{
+"target": "body",
+"modifier": "phone",
+"value": "^((?!((\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4})).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "AND",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"email\" : \"Veuillez entrer votre email\",\n\t  \"password\" : \"Veuillez entrer un mot de passe valide\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "email & password error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "email",
+"value": "^((?!([\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4})).)*$",
+"isRegex": true
+},
+{
+"target": "body",
+"modifier": "password",
+"value": "^((?!((?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,})).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "AND",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"fullname\" : \"Veuillez entrer votre nom\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "fullname error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "fullname",
+"value": "",
+"isRegex": false
+}
+],
+"rulesOperator": "AND",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"email\" : \"Veuillez entrer votre email\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "email error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "email",
+"value": "^((?!([\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4})).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"password\" : \"Veuillez entrer un mot de passe valide\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "password error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "password",
+"value": "^((?!((?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,})).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"phone\" : \"Veuillez entrer votre numero de telephone\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "phone error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "phone",
+"value": "^((?!((\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4})).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+}
+],
+"enabled": true,
+"randomResponse": false,
+"sequentialResponse": false
+},
+{
+"uuid": "",
+"documentation": "Check code validation",
+"method": "post",
+"endpoint": "api/validate_account",
+"responses": [
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"code\" : \"le code que vous avez entrer est erroné\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n    \"statusCode\": 401,\n    \"message\": \"Unauthorized\"\n}",
+"latency": 0,
+"statusCode": 401,
+"label": "Token wrong",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "header",
+"modifier": "Authorization",
+"value": "^((?!(Bearer 012345678910$)).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"security\": {\n\t\t\"access_token\": \"012345678910\",\n\t},\n\t\"user\": {\n\t\t\"id\": 34,\n\t\t\"fname\": \"{{ faker 'name.firstName' }}\",\n\t\t\"lname\": \"{{ faker 'name.lastName' }}\",\n\t\t\"email\": \"{{email}}\",\n\t\t\"phone\": \"{{ faker 'phone.phoneNumber' }}\",\n\t\t\"address\": \"{{ street }}\",\n\t\t\"city\": \"{{ faker 'address.city' }}\",\n\t\t\"zip_code\": \"{{ faker 'address.zipCode' }}\",\n\t\t\"stat\": 1,\n\t\t\"created\": \"{{ faker 'date.past' 12}}\",\n\t\t\"media_id\": \"{{ faker 'image.avatar' }}\",\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "code success",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "code",
+"value": "123456",
+"isRegex": false
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+}
+],
+"enabled": true,
+"randomResponse": false,
+"sequentialResponse": false
+},
+{
+"uuid": "",
+"documentation": "send code to reset password",
+"method": "post",
+"endpoint": "api/forgot_password",
+"responses": [
+{
+"uuid": "",
+"body": "{\n\t\"code\": 1,\n\t\"data\": {\n    \"code\" : \"123456\",\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"email\" : \"Veuillez entrer votre email\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "email error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "email",
+"value": "^((?!([\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4})).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"email\" : \"Email non trouvé\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "email inccorect",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "email",
+"value": "^((?!(youssef@ajicreative.fr$)).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+}
+],
+"enabled": true,
+"randomResponse": false,
+"sequentialResponse": false
+},
+{
+"uuid": "",
+"documentation": "Reset password (enter new password)",
+"method": "post",
+"endpoint": "api/reset_password",
+"responses": [
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"code\" : \"Veuillez entrer votre code\",\n\t  \"email\" : \"Veuillez entrer votre email\",\n\t  \"password\" : \"Veuillez entrer votre nouveau mot de passe\",\n\t},\n\t\"data\": {\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"email\" : \"Veuillez entrer votre email\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "email error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "email",
+"value": "^((?!([\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4})).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"email\" : \"Email non trouvé\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "email inccorect",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "email",
+"value": "^((?!(youssef@ajicreative.fr$)).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"code\" : \"Code inccorect\",\n\t},\n\t\"data\": {\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "code inccorect",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "code",
+"value": "^((?!(123456$)).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"password\" : \"Veuillez entrer un mot de passe qui contient au moins 8 lettres\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "password wrong",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "password",
+"value": "^((?!((?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,})).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n  \"code\" : 1,\n  \"message\" : \"Votre mot de passe a été modifié avec success\",\n  \"data\" : {\n    \n  }\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "correct params",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "code",
+"value": "123456",
+"isRegex": false
+},
+{
+"target": "body",
+"modifier": "email",
+"value": "youssef@ajicreative.fr",
+"isRegex": false
+}
+],
+"rulesOperator": "AND",
+"disableTemplating": false
+}
+],
+"enabled": true,
+"randomResponse": false,
+"sequentialResponse": false
+},
+{
+"uuid": "",
+"documentation": "Update password",
+"method": "post",
+"endpoint": "api/update_password",
+"responses": [
+{
+"uuid": "",
+"body": "{\n\t\"code\": 1,\n\t\"message\" : \"Votre mot de passe a été modifié avec success\",\n\t\"data\": {\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n  \"statusCode\": 401,\n  \"message\": \"Unauthorized\"\n}",
+"latency": 0,
+"statusCode": 401,
+"label": "token wrong",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "header",
+"modifier": "Authorization",
+"value": "^((?!(Bearer 012345678910$)).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"new_password\" : \"Veuillez entrer un mot de passe qui contient au moins 8 lettres\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "password wrong",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "new_password",
+"value": "^((?!((?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,})).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"password\" : \"Veuillez entrer votre mot de passe actuel\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "password inccorect",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "password",
+"value": "^((?!(123456aA$)).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+}
+],
+"enabled": true,
+"randomResponse": false,
+"sequentialResponse": false
+},
+{
+"uuid": "",
+"documentation": "update user account",
+"method": "post",
+"endpoint": "api/update_account",
+"responses": [
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"email\" : \"Veuillez entrer votre email\",\n\t  \"phone\" : \"Veuillez entrer votre numero de telephone\",\n\t  \"fullname\" : \"Veuillez entrer votre nom\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}\n",
+"latency": 0,
+"statusCode": 200,
+"label": "",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [],
+"rulesOperator": "AND",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n  \"statusCode\": 401,\n  \"message\": \"Unauthorized\"\n}",
+"latency": 0,
+"statusCode": 401,
+"label": "token wrong",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "header",
+"modifier": "Authorization",
+"value": "^((?!(Bearer 012345678910$)).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"fullname\" : \"Veuillez entrer votre nom\",\n\t  \"email\" : \"Veuillez entrer votre email\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "name & email error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "email",
+"value": "^((?!([\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4})).)*$",
+"isRegex": true
+},
+{
+"target": "body",
+"modifier": "fullname",
+"value": "",
+"isRegex": false
+}
+],
+"rulesOperator": "AND",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"fullname\" : \"Veuillez entrer votre nom\",\n\t  \"phone\" : \"Veuillez entrer votre numero de telephone\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "name & phone error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "phone",
+"value": "^((?!((\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4})).)*$",
+"isRegex": true
+},
+{
+"target": "body",
+"modifier": "fullname",
+"value": "",
+"isRegex": false
+}
+],
+"rulesOperator": "AND",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"email\" : \"Veuillez entrer votre email\",\n\t  \"phone\" : \"Veuillez entrer votre numero de telephone\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "email & phone error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "email",
+"value": "^((?!([\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4})).)*$",
+"isRegex": true
+},
+{
+"target": "body",
+"modifier": "phone",
+"value": "^((?!((\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4})).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "AND",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"fullname\" : \"Veuillez entrer votre nom\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "fullname error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "fullname",
+"value": "",
+"isRegex": false
+}
+],
+"rulesOperator": "AND",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"email\" : \"Veuillez entrer votre email\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "email error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "email",
+"value": "^((?!([\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4})).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"form\" : {\n\t  \"phone\" : \"Veuillez entrer votre numero de telephone\",\n\t},\n\t\"data\": {\n\t\t\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "phone error",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "phone",
+"value": "^((?!((\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4})).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": 1,\n\t\"data\" : {\n    \"user\": {\n  \t\t\"id\": 34,\n  \t\t\"fname\": \"{{ body 'fullname' }}\",\n  \t\t\"email\": \"{{body 'email'}}\",\n  \t\t\"phone\": \"{{ body 'phone' }}\",\n  \t\t\"address\": \"{{ street }}\",\n  \t\t\"city\": \"{{ faker 'address.city' }}\",\n  \t\t\"zip_code\": \"{{ faker 'address.zipCode' }}\",\n  \t\t\"stat\": 1,\n  \t\t\"created\": \"{{ faker 'date.past' 12}}\",\n  \t\t\"media_id\": \"{{ faker 'image.avatar' }}\",\n  \t}\n\t}\n\t\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "correct params",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "email",
+"value": "^([\\w\\.]+@([\\w-]+\\.)+[\\w-]{2,4})$",
+"isRegex": true
+},
+{
+"target": "body",
+"modifier": "fullname",
+"value": "^.*$",
+"isRegex": true
+},
+{
+"target": "body",
+"modifier": "phone",
+"value": "^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$",
+"isRegex": true
+}
+],
+"rulesOperator": "AND",
+"disableTemplating": false
+}
+],
+"enabled": true,
+"randomResponse": false,
+"sequentialResponse": false
+},
+{
+"uuid": "",
+"documentation": "Set device token for notification",
+"method": "post",
+"endpoint": "api/set_device_token",
+"responses": [
+{
+"uuid": "",
+"body": "{\n\t\"code\": 1,\n\t\"message\" : \"Votre token a été modifié avec success\",\n\t\"data\": {\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n  \"statusCode\": 401,\n  \"message\": \"Unauthorized\"\n}",
+"latency": 0,
+"statusCode": 401,
+"label": "token wrong",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "header",
+"modifier": "Authorization",
+"value": "^((?!(Bearer 012345678910$)).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"message\" : \"Device type not specified\",\n\t\"data\": {\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "device type wrong",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "device_type",
+"value": "^((?!(ios$)).)*$",
+"isRegex": true
+},
+{
+"target": "body",
+"modifier": "device_type",
+"value": "^((?!(android$)).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "AND",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{\n\t\"code\": -1,\n\t\"message\" : \"Device token not specified\",\n\t\"data\": {\n\t}\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "device_token wrong",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "body",
+"modifier": "device_token",
+"value": "^((?!(.*$)).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "AND",
+"disableTemplating": false
+}
+],
+"enabled": true,
+"randomResponse": false,
+"sequentialResponse": false
+},
+{
+"uuid": "",
+"documentation": "",
+"method": "get",
+"endpoint": "api/store_info",
+"responses": [
+{
+"uuid": "",
+"body": "{\n  \"code\": 1,\n  \"data\": {\n    \"infos\": {\n      \"id\": 1,\n      \"name\": \"EatBy Me\",\n      \"description\": \"{{lorem 50 200}}\",\n      \"email\": \"eatby.me@gmail.com\",\n      \"phone\": \"{{phone}}\",\n      \"location\" : {\n        \"address\": \"{{street}}\",\n        \"city\": \"{{city}}\",\n        \"zip_code\": \"{{zipcode}}\",\n        \"country\": \"France\",\n        \"geo_lat\": \"{{lat}}\",\n        \"geo_lng\": \"{{long}}\",\n      },\n      \"medias\": [\n        {{# repeat (faker 'random.number' min=2 max=5) }}\n          {\n            \"id\": \"{{ faker 'random.uuid' }}\",\n            \"name\": \"{{ faker 'image.business'}}\",\n          },\n        {{/ repeat }}\n      ],\n      \"settings\" : {\n        \"lang\": \"FR\",\n        \"available\": {{boolean}},\n        \"delivery\": {{boolean}},\n        \"stat\": 1,\n        \"schedule\": \"{{time '09:00' '10:00' 'HH:mm'}} - {{time '21:00' '23:00' 'HH:mm'}}\",\n        \"ready_time\": \"{{time '09:00' '23:00' 'HH:mm'}}\",\n        \"payments\" : [\n          \"Stripe\" : {\n            \"stripe_payment\": 1,\n            \"stripe_pk\": \"jghgH788GG29GDfadgH2NUS2GS2HR02YY72HS2B62BSY2BHblpdab\",\n          },\n        ],\n        \"social\" : {\n          \"website\": \"http://nousrestaurant.fr/\",\n          \"instagram\": \"https://www.instagram.com/resto.halal/?hl=fr\",\n          \"facebook\": \"https://www.facebook.com/restohalal/\",\n        },\n        \"links\" : {\n          \"terms_of_service\": \"https://www.google.com/cgu\",\n          \"terms_of_sales\": \"https://www.google.com/cgv\",\n          \"privacy_policy\": \"https://www.google.com/pp\",\n          \"legal_notice\": \"https://www.google.com/lg\",\n        },\n      },\n      \"identity\": \"\",\n    }\n  }\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{}",
+"latency": 0,
+"statusCode": 200,
+"label": "Store not specified",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "query",
+"modifier": "id",
+"value": "^((?!(10$)).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+}
+],
+"enabled": true,
+"randomResponse": false,
+"sequentialResponse": false
+},
+{
+"uuid": "",
+"documentation": "",
+"method": "get",
+"endpoint": "api/menus",
+"responses": [
+{
+"uuid": "",
+"body": "{\n  \"code\": 1,\n  \"data\": {\n    \"items\": [\n      {{# repeat (faker 'random.number' min=0 max=2) }}\n      {{setVar 'menuName' (oneOf (array 'Hum Neymar' 'PizzaLina' 'Chawarma Double'))}}\n      {\n        \"id\": 1,\n        \"name\": {{@menuName}},\n        \"description\": \"Humburger épicé avec deux steaks de boeuf.\",\n        \"price\": {{faker 'finance.amount'}},\n        \"promo_price\": 0,\n        \"stat\": {{boolean}},\n        \"available\": {{boolean}},\n        \"category\" : {\n          {{# switch @menuName}}\n            {{# case \"Hum Neymar\" }} \"id\": 1, \"name\": \"Hamburger\" , {{/ case }}\n            {{# case \"PizzaLina\" }} \"id\": 2, \"name\": \"pizza\" , {{/ case }}\n            {{# case \"Chawarma Double\" }} \"id\": 3,  \"name\": \"Chawarma\" , {{/ case }}\n            {{# default }} \"id\": 4,  \"name\": \"autres\" , {{/ default }}\n          {{/ switch }}\n        },\n        \"medias\": [\n          {{# repeat (faker 'random.number' min=2 max=5) }}\n            {\n              \"id\": \"{{ faker 'random.uuid' }}\",\n              \"name\": \"{{ faker 'image.business'}}\",\n            },\n          {{/ repeat }}\n        ],\n        \"extras\": [\n          {{# repeat (faker 'random.number' min=0 max=2) }}\n          {{setVar 'extra' (oneOf (array 'Boissons' 'Sauces'))}}\n          {{# switch @extra}}\n            {{# case \"Boissons\" }} {{setVar 'desc_extra' 'Boissons gratuites'}} {{/ case }}\n            {{# case \"Sauces\" }} {{setVar 'desc_extra' 'Sauces au choix'}} {{/ case }}\n            {{# default }} {{setVar 'desc_extra' 'Autres'}} {{/ default }}\n          {{/ switch }}\n          {\n              \"id\": 1, \n              \"name\": {{@extra}},\n              \"description\": {{@desc_extra}},\n              \"min\" : {{faker 'random.number' min=0 max=2}},\n              \"max\" : {{faker 'random.number' min=1 max=5}},\n              \"sub_extras\": [\n                {\n                  \"id\": 1,\n                  {{# switch @extra}}\n                    {{# case \"Boissons\" }} \"name\": {{oneOf (array 'Coca cola' 'Fanta')}}, {{/ case }}\n                    {{# case \"Sauces\" }} \"name\": {{oneOf (array 'Biggy' 'Algeriane')}}, {{/ case }}\n                    {{# default }} \"name\": \"autres\", {{/ default }}\n                  {{/ switch }}\n                  \"price\": 0.75,\n                  \"stat\": 1,\n                  \"available\": 1\n                },\n                \n                {\n                  \"id\": 2,\n                  {{# switch @extra}}\n                    {{# case \"Boissons\" }} \"name\": {{oneOf (array 'Coca cola' 'Fanta')}}, {{/ case }}\n                    {{# case \"Sauces\" }} \"name\": {{oneOf (array 'Biggy' 'Algeriane')}}, {{/ case }}\n                    {{# default }} \"name\": \"autres\", {{/ default }}\n                  {{/ switch }}\n                  \"price\": 0.75,\n                  \"stat\": 1,\n                  \"available\": 1\n                },\n              ]\n            },\n          {{/ repeat }}\n          ]\n        \n      }\n      {{/ repeat }}\n    ]\n  }\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [],
+"rulesOperator": "OR",
+"disableTemplating": false
+}
+],
+"enabled": true,
+"randomResponse": false,
+"sequentialResponse": false
+},
+{
+"uuid": "",
+"documentation": "",
+"method": "get",
+"endpoint": "api/categories_menus",
+"responses": [
+{
+"uuid": "",
+"body": "{\n  \"code\": 1,\n  \"data\": {\n    \"categories\": [\n       {{# repeat (faker 'random.number' min=5 max=10) }}\n       {{setVar 'category' (oneOf (array 'Pizzas' 'Humburgers' 'Sandwichs'))}}\n\t\t\t\t{\n\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"{{@category}}\",\n\t\t\t\t\t\"description\": \"Catégorie des {{@category}}.\",\n\t\t\t\t\t\"image\": \"{{ faker 'image.food'}}\"\n\t\t\t\t}\n\t\t\t\t{{/ repeat }}\n\t\t\t],\n    \"items\": [\n      {{# repeat (faker 'random.number' min=0 max=2) }}\n      {{setVar 'menuName' (oneOf (array 'Hum Neymar' 'PizzaLina' 'Chawarma Double'))}}\n      {\n        \"id\": 1,\n        \"name\": {{@menuName}},\n        \"description\": \"Humburger épicé avec deux steaks de boeuf.\",\n        \"price\": {{faker 'finance.amount'}},\n        \"promo_price\": 0,\n        \"stat\": {{boolean}},\n        \"available\": {{boolean}},\n        \"category\" : {\n          {{# switch @menuName}}\n            {{# case \"Hum Neymar\" }} \"id\": 1, \"name\": \"Hamburger\" , {{/ case }}\n            {{# case \"PizzaLina\" }} \"id\": 2, \"name\": \"pizza\" , {{/ case }}\n            {{# case \"Chawarma Double\" }} \"id\": 3,  \"name\": \"Chawarma\" , {{/ case }}\n            {{# default }} \"id\": 4,  \"name\": \"autres\" , {{/ default }}\n          {{/ switch }}\n        },\n        \"medias\": [\n          {{# repeat (faker 'random.number' min=2 max=5) }}\n            {\n              \"id\": \"{{ faker 'random.uuid' }}\",\n              \"name\": \"{{ faker 'image.business'}}\",\n            },\n          {{/ repeat }}\n        ],\n        \"extras\": [\n          {{# repeat (faker 'random.number' min=0 max=2) }}\n          {{setVar 'extra' (oneOf (array 'Boissons' 'Sauces'))}}\n          {{# switch @extra}}\n            {{# case \"Boissons\" }} {{setVar 'desc_extra' 'Boissons gratuites'}} {{/ case }}\n            {{# case \"Sauces\" }} {{setVar 'desc_extra' 'Sauces au choix'}} {{/ case }}\n            {{# default }} {{setVar 'desc_extra' 'Autres'}} {{/ default }}\n          {{/ switch }}\n          {\n              \"id\": 1, \n              \"name\": {{@extra}},\n              \"description\": {{@desc_extra}},\n              \"min\" : {{faker 'random.number' min=0 max=2}},\n              \"max\" : {{faker 'random.number' min=1 max=5}},\n              \"sub_extras\": [\n                {\n                  \"id\": 1,\n                  {{# switch @extra}}\n                    {{# case \"Boissons\" }} \"name\": {{oneOf (array 'Coca cola' 'Fanta')}}, {{/ case }}\n                    {{# case \"Sauces\" }} \"name\": {{oneOf (array 'Biggy' 'Algeriane')}}, {{/ case }}\n                    {{# default }} \"name\": \"autres\", {{/ default }}\n                  {{/ switch }}\n                  \"price\": 0.75,\n                  \"stat\": 1,\n                  \"available\": 1\n                },\n                \n                {\n                  \"id\": 2,\n                  {{# switch @extra}}\n                    {{# case \"Boissons\" }} \"name\": {{oneOf (array 'Coca cola' 'Fanta')}}, {{/ case }}\n                    {{# case \"Sauces\" }} \"name\": {{oneOf (array 'Biggy' 'Algeriane')}}, {{/ case }}\n                    {{# default }} \"name\": \"autres\", {{/ default }}\n                  {{/ switch }}\n                  \"price\": 0.75,\n                  \"stat\": 1,\n                  \"available\": 1\n                },\n              ]\n            },\n          {{/ repeat }}\n          ]\n        \n      }\n      {{/ repeat }}\n    ]\n  }\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [],
+"rulesOperator": "OR",
+"disableTemplating": false
+}
+],
+"enabled": true,
+"randomResponse": false,
+"sequentialResponse": false
+},
+{
+"uuid": "",
+"documentation": "",
+"method": "get",
+"endpoint": "api/orders",
+"responses": [
+{
+"uuid": "",
+"body": "{\n  \"code\": 1,\n  \"data\": {\n    \"items\": [\n        {{# repeat (faker 'random.number' min=0 max=4) }}\n        {\n          \"id\" : ,\n          \"total\" : {{faker 'finance.amount'}},\n          \"sub_total\" : {{faker 'finance.amount'}},,\n          \"note\" : \"{{lorem}}\",\n          \"order_status\" : 1, // pending, preapring, delivred, delevring, canceled\n          \"delivery_wish_date\" : \"{{now}}\",\n          \"delivery_date\" : \"{{now}}\",\n          \"created\": \"{{now}}\",\n          \"items\": [\n            {{# repeat (faker 'random.number' min=1 max=3) }}\n            {{setVar 'menuName' (oneOf (array 'Hum Neymar' 'PizzaLina' 'Chawarma Double'))}}\n            {\n              \"id\": 1,\n              \"name\": {{@menuName}},\n              \"description\": \"Humburger épicé avec deux steaks de boeuf.\",\n              \"price\": {{faker 'finance.amount'}},\n              \"promo_price\": 0,\n              \"stat\": {{boolean}},\n              \"available\": {{boolean}},\n              \"category\" : {\n                {{# switch @menuName}}\n                  {{# case \"Hum Neymar\" }} \"id\": 1, \"name\": \"Hamburger\" , {{/ case }}\n                  {{# case \"PizzaLina\" }} \"id\": 2, \"name\": \"pizza\" , {{/ case }}\n                  {{# case \"Chawarma Double\" }} \"id\": 3,  \"name\": \"Chawarma\" , {{/ case }}\n                  {{# default }} \"id\": 4,  \"name\": \"autres\" , {{/ default }}\n                {{/ switch }}\n              },\n              \"medias\": [\n                {{# repeat (faker 'random.number' min=2 max=5) }}\n                  {\n                    \"id\": \"{{ faker 'random.uuid' }}\",\n                    \"name\": \"{{ faker 'image.business'}}\",\n                  },\n                {{/ repeat }}\n              ],\n              \"extras\": [\n                {{# repeat (faker 'random.number' min=0 max=2) }}\n                {{setVar 'extra' (oneOf (array 'Boissons' 'Sauces'))}}\n                {{# switch @extra}}\n                  {{# case \"Boissons\" }} {{setVar 'desc_extra' 'Boissons gratuites'}} {{/ case }}\n                  {{# case \"Sauces\" }} {{setVar 'desc_extra' 'Sauces au choix'}} {{/ case }}\n                  {{# default }} {{setVar 'desc_extra' 'Autres'}} {{/ default }}\n                {{/ switch }}\n                {\n                    \"id\": 1, \n                    \"name\": {{@extra}},\n                    \"description\": {{@desc_extra}},\n                    \"min\" : {{faker 'random.number' min=0 max=2}},\n                    \"max\" : {{faker 'random.number' min=1 max=5}},\n                    \"sub_extras\": [\n                      {\n                        \"id\": 1,\n                        {{# switch @extra}}\n                          {{# case \"Boissons\" }} \"name\": {{oneOf (array 'Coca cola' 'Fanta')}}, {{/ case }}\n                          {{# case \"Sauces\" }} \"name\": {{oneOf (array 'Biggy' 'Algeriane')}}, {{/ case }}\n                          {{# default }} \"name\": \"autres\", {{/ default }}\n                        {{/ switch }}\n                        \"price\": 0.75,\n                        \"stat\": 1,\n                        \"available\": 1\n                      },\n                      \n                      {\n                        \"id\": 2,\n                        {{# switch @extra}}\n                          {{# case \"Boissons\" }} \"name\": {{oneOf (array 'Coca cola' 'Fanta')}}, {{/ case }}\n                          {{# case \"Sauces\" }} \"name\": {{oneOf (array 'Biggy' 'Algeriane')}}, {{/ case }}\n                          {{# default }} \"name\": \"autres\", {{/ default }}\n                        {{/ switch }}\n                        \"price\": 0.75,\n                        \"stat\": 1,\n                        \"available\": 1\n                      },\n                    ]\n                  },\n                {{/ repeat }}\n                ]\n              \n            },\n            {{/ repeat }}\n          ]\n        }\n      {{/ repeat }}\n    ]\n  }\n}",
+"latency": 0,
+"statusCode": 200,
+"label": "",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [],
+"rulesOperator": "OR",
+"disableTemplating": false
+},
+{
+"uuid": "",
+"body": "{}",
+"latency": 0,
+"statusCode": 401,
+"label": "token wrong",
+"headers": [],
+"filePath": "",
+"sendFileAsBody": false,
+"rules": [
+{
+"target": "header",
+"modifier": "Authorization",
+"value": "^((?!(Bearer 012345678910$)).)*$",
+"isRegex": true
+}
+],
+"rulesOperator": "OR",
+"disableTemplating": false
+}
+],
+"enabled": true,
+"randomResponse": false,
+"sequentialResponse": false
+}
+],
+"proxyMode": false,
+"proxyHost": "",
+"proxyRemovePrefix": false,
+"https": false,
+"cors": true,
+"headers": [
+{
+"key": "Content-Type",
+"value": "application/json"
+}
+],
+"proxyReqHeaders": [
+{
+"key": "",
+"value": ""
+}
+],
+"proxyResHeaders": [
+{
+"key": "",
+"value": ""
+}
+]
+}
+}
+]
+}
